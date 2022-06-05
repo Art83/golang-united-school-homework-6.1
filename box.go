@@ -16,7 +16,7 @@ func NewBox(shapesCapacity int) *box {
 }
 
 func (b *box) AddShape(shape Shape) error {
-	if cap(b.shapes) == b.shapesCapacity {
+	if len(b.shapes) >= b.shapesCapacity {
 		return errors.New("out of range")
 	} else {
 		b.shapes = append(b.shapes, shape)
@@ -80,11 +80,13 @@ func (b *box) SumArea() float64 {
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() error {
 	cnt := 0
-	for i, val := range b.shapes {
-		_, err := val.(Circle)
-		if err {
+	cp := b.shapes
+	b.shapes = make([]Shape, 0)
+	for _, val := range cp {
+		_, err := val.(*Circle)
+		if err == false {
 			cnt += 1
-			b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
+			b.shapes = append(b.shapes, val)
 		}
 	}
 	if cnt == 0 {
