@@ -85,8 +85,9 @@ func (b *box) RemoveAllCircles() error {
 	for _, val := range cp {
 		_, err := val.(*Circle)
 		if err == false {
-			cnt += 1
 			b.shapes = append(b.shapes, val)
+		} else {
+			cnt++
 		}
 	}
 	if cnt == 0 {
